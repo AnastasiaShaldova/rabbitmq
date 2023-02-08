@@ -1,0 +1,15 @@
+FROM python:3.10
+COPY . .
+
+COPY ./requirements.txt ./requirements.txt
+COPY ./docker-entrypoint.sh ./docker-entrypoint.sh
+
+WORKDIR .
+
+ADD receive.py .
+ADD requirements.txt .
+ADD docker-entrypoint.sh .
+
+RUN pip install -r requirements.txt
+
+CMD ["docker", "run", "--rm", "-p", "15672:15672", "rabbitmq:3.10.7-management", "python", "/receive.py"]
